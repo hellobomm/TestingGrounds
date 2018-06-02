@@ -24,5 +24,13 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Blackboard")
 		FBlackboardKeySelector IndexKey;
 
+	UPROPERTY(EditAnywhere, Category = "Blackboard")
+		FBlackboardKeySelector WayPointKey;
+
+private:
+
+	int32 IndexOfCurrentWaypoint=0;
+
+
 };
  

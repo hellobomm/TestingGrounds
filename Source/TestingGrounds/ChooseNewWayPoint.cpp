@@ -4,7 +4,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "AIController.h"
-#include "Public/PatrollingGuard.h"  //TODO remove coupling
+#include "PatrolRoute.h"
 
 
 
@@ -14,12 +14,16 @@ EBTNodeResult::Type UChooseNewWayPoint::ExecuteTask(UBehaviorTreeComponent& Owne
 	//UBTTaskNode  is an abstract class, so it has no definitions, only declarations. 
 	//That is why Super::ExecuteTask() is not used here
 	
-	
-	//get TP
+
+	//get PatrolRouteComponent of OwningPawn
 	auto AIController = OwnerComp.GetAIOwner();
 	auto ControlledPawn = AIController->GetPawn();
-	auto PatrollingGuard = Cast<APatrollingGuard>(ControlledPawn);
-	auto PatrolPoints = PatrollingGuard->PatrolPointsCPP;
+	auto PatrolRouteComponent = ControlledPawn->FindComponentByClass<UPatrolRoute>();
+	if (!ensure(PatrolRouteComponent)) { return EBTNodeResult::Failed; };
+
+	//warn about empty patrol routes
+	auto PatrolPoints = PatrolRouteComponent->GetPatrolPoints();
+	if (PatrolPoints.Num() == 0) UE_LOG(LogTemp, Warning, TEXT("A Guard misses PatrolPoints"));
 
 	//set next waypoint
 	//get blackboard and current index
@@ -29,13 +33,11 @@ EBTNodeResult::Type UChooseNewWayPoint::ExecuteTask(UBehaviorTreeComponent& Owne
 	//set the WaypointKey on the blackboard
 	BlackboardComp->SetValueAsObject(WayPointKey.SelectedKeyName, PatrolPoints[Index]);
 
-	//TODO protect against empty patrol routes
 
 	//cycle the Index
 	auto NextIndex = (Index + 1) % PatrolPoints.Num();   //the mod operator
 	BlackboardComp->SetValueAsInt(IndexKey.SelectedKeyName, NextIndex);
 
-	//UE_LOG(LogTemp, Warning, TEXT("waypoints name: %s"), *CurrentWaypoint->GetName())
 
 	return EBTNodeResult::Succeeded;
 }

@@ -28,7 +28,14 @@ EBTNodeResult::Type UChooseNewWayPoint::ExecuteTask(UBehaviorTreeComponent& Owne
 	//set next waypoint
 	//get blackboard and current index
 	auto BlackboardComp = OwnerComp.GetBlackboardComponent();
+
+	
+
 	int32 Index = BlackboardComp->GetValueAsInt(IndexKey.SelectedKeyName);
+UE_LOG(LogTemp, Warning, TEXT("index from blackboard, %i"), Index)
+
+auto actorrr = PatrolPoints[Index];
+UE_LOG(LogTemp, Warning, TEXT("name of waypoint, %s"), *actorrr->GetName())
 
 	//set the WaypointKey on the blackboard
 	BlackboardComp->SetValueAsObject(WayPointKey.SelectedKeyName, PatrolPoints[Index]);

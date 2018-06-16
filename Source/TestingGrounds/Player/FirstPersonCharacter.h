@@ -7,6 +7,7 @@
 #include "FirstPersonCharacter.generated.h"
 
 class UInputComponent;
+class AGun;
 
 UCLASS(config=Game)
 class AFirstPersonCharacter : public ACharacter
@@ -59,6 +60,14 @@ public:
 	/** Whether to use motion controller location for aiming. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	uint32 bUsingMotionControllers : 1;
+
+	UPROPERTY(EditDefaultsOnly, Category = "SetUp")
+		TSubclassOf<AGun> GunBlueprint; //makes the "GunBlueprint" available to the FirstPersonBlueprint
+
+private:
+
+	AGun* Gun{ nullptr };
+
 
 protected:
 	

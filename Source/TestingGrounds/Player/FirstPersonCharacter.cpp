@@ -9,6 +9,12 @@
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
+#include "Engine/World.h"
+#include "Runtime/Engine/Classes/GameFramework/Character.h"
+#include "Weapons/Gun.h"
+#include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
+
+
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -69,15 +75,29 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 
 	// Uncomment the following line to turn motion controllers on by default:
 	//bUsingMotionControllers = true;
+
+
+
+
 }
 
 void AFirstPersonCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+	
+	if (!GunBlueprint)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("no GunBlueprint found"))
+			return;
+	}
+
+	Gun = GetWorld()->SpawnActor<AGun>(GunBlueprint); //no Transforms because it will be attached in a second
+	if (!ensure(Gun))return;
 
 	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
-	//TODO FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	//"GripPoint" is a socket in the skeleton
 
 	// Show or hide the two versions of the gun based on whether or not we're using motion controllers.
 	if (bUsingMotionControllers)

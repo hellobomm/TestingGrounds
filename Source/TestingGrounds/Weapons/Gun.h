@@ -50,11 +50,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class UAnimInstance* AnimInstance; //forward declaration
+					   
+	void OnFire();	/** Fires a projectile. */
 
 
-protected:
-	/** Fires a projectile. */
-	void OnFire();
 
 	
 	

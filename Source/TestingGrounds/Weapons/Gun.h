@@ -7,7 +7,6 @@
 #include "BallProjectile.h"
 #include "Gun.generated.h"
 
-
 UCLASS()
 class TESTINGGROUNDS_API AGun : public AActor
 {
@@ -50,7 +49,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class UAnimInstance* AnimInstance; //forward declaration
-					   
+	
+	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnFire();	/** Fires a projectile. */
 
 

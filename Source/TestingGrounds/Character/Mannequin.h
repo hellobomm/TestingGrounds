@@ -36,7 +36,7 @@ public:
 		TSubclassOf<AGun> GunBlueprint; //makes the "GunBlueprint" available to the BP_Character
 	
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-		void Fire();
+		void PullTrigger();
 
 
 private:

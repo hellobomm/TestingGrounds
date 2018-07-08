@@ -56,6 +56,17 @@ void AMannequin::BeginPlay()
 	//"GripPoint" is a socket in the skeleton
 
 	Gun->AnimInstance = Mesh1P->GetAnimInstance();  //our gun animates the mesh
+
+
+	
+	//SetupPlayerInputComponent happens BEFORE BeginPlay in which we spawn the Gun.
+	//So we move the fire binding from SetupPlayerInputComponent to here because we can now be sure that we already have a gun. 
+	// Bind fire event
+	if (InputComponent)  //we don't have an InputComponent if we are possessed by an AIController
+	{
+		InputComponent->BindAction("Fire", IE_Pressed, this, &AMannequin::PullTrigger);
+	}
+
 }
 
 // Called every frame
@@ -65,14 +76,14 @@ void AMannequin::Tick(float DeltaTime)
 
 }
 
-// Called to bind functionality to input
+// Called to bind functionality to input    
+//(If I am being possessed by a Player then connect my input component to the relevant bindings on this Character)
 void AMannequin::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
-void AMannequin::Fire()
+void AMannequin::PullTrigger()
 {
 		Gun->OnFire();
 }

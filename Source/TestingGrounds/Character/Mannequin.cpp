@@ -55,8 +55,7 @@ void AMannequin::BeginPlay()
 	Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 	//"GripPoint" is a socket in the skeleton
 
-	Gun->AnimInstance = Mesh1P->GetAnimInstance();  //our gun animates the mesh
-
+	Gun->AnimInstance = GetMesh()->GetAnimInstance();  //get the animation instance from the Character
 
 	
 	//SetupPlayerInputComponent happens BEFORE BeginPlay in which we spawn the Gun.

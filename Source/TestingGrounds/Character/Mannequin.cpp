@@ -56,7 +56,7 @@ void AMannequin::BeginPlay()
 	//"GripPoint" is a socket in the skeleton
 
 	Gun->AnimInstance = GetMesh()->GetAnimInstance();  //get the animation instance from the Character
-
+	//Gun->AnimInstance = Mesh1P->GetAnimInstance(); //get the animation instance from the FP Mesh
 	
 	//SetupPlayerInputComponent happens BEFORE BeginPlay in which we spawn the Gun.
 	//So we move the fire binding from SetupPlayerInputComponent to here because we can now be sure that we already have a gun. 
@@ -65,7 +65,6 @@ void AMannequin::BeginPlay()
 	{
 		InputComponent->BindAction("Fire", IE_Pressed, this, &AMannequin::PullTrigger);
 	}
-
 }
 
 // Called every frame

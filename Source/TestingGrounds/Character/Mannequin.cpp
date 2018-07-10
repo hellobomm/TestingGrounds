@@ -51,9 +51,19 @@ void AMannequin::BeginPlay()
 	Gun = GetWorld()->SpawnActor<AGun>(GunBlueprint); //no Transforms because it will be attached in a second
 	if (!ensure(Gun))return;
 
-	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
-	Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
-	//"GripPoint" is a socket in the skeleton
+	
+	if (IsPlayerControlled())     //also possible: Controller->IsPlayerController
+	{
+		//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
+		Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+		//"GripPoint" is a socket in the skeleton
+	}
+	else //Controller is an AIController of a TP. Attach it to the main mesh
+	{
+		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	}
+
+	
 
 	Gun->AnimInstance = GetMesh()->GetAnimInstance();  //get the animation instance from the Character
 	//Gun->AnimInstance = Mesh1P->GetAnimInstance(); //get the animation instance from the FP Mesh

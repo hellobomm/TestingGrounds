@@ -51,10 +51,9 @@ void AMannequin::BeginPlay()
 	Gun = GetWorld()->SpawnActor<AGun>(GunBlueprint); //no Transforms because it will be attached in a second
 	if (!ensure(Gun))return;
 
-	
+	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
 	if (IsPlayerControlled())     //also possible: Controller->IsPlayerController
 	{
-		//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
 		Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 		//"GripPoint" is a socket in the skeleton
 	}
@@ -65,8 +64,8 @@ void AMannequin::BeginPlay()
 
 	
 
-	Gun->AnimInstance = GetMesh()->GetAnimInstance();  //get the animation instance from the Character
-	//Gun->AnimInstance = Mesh1P->GetAnimInstance(); //get the animation instance from the FP Mesh
+	Gun->AnimInstanceTP = GetMesh()->GetAnimInstance();  //get the animation instance from the Character
+	Gun->AnimInstanceFP = Mesh1P->GetAnimInstance(); //get the animation instance from the FP Mesh
 	
 	//SetupPlayerInputComponent happens BEFORE BeginPlay in which we spawn the Gun.
 	//So we move the fire binding from SetupPlayerInputComponent to here because we can now be sure that we already have a gun. 
@@ -89,6 +88,15 @@ void AMannequin::Tick(float DeltaTime)
 void AMannequin::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void AMannequin::UnPossessed() //reattach gun when we die...
+{
+	Super::UnPossessed(); //don't forget
+	if (Gun)
+	{
+		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	}
 }
 
 void AMannequin::PullTrigger()

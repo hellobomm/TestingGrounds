@@ -45,10 +45,16 @@ public:
 
 	/** AnimMontage to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-		class UAnimMontage* FireAnimation;
+		class UAnimMontage* FireAnimationTP;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-		class UAnimInstance* AnimInstance; //forward declaration
+		class UAnimMontage* FireAnimationFP;
+
+	UPROPERTY() //don't remove! Otherwise it will not be garbage collected
+		class UAnimInstance* AnimInstanceTP; //forward declaration
+
+	UPROPERTY() //don't remove! Otherwise it will not be garbage collected 
+		class UAnimInstance* AnimInstanceFP; //forward declaration
 	
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void OnFire();	/** Fires a projectile. */

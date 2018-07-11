@@ -48,10 +48,10 @@ void AGun::Tick(float DeltaTime)
 void AGun::OnFire()
 {
 	// try and fire a projectile
-	if (ProjectileClass != NULL)
+	if (ProjectileClass != nullptr)
 	{
 		UWorld* const World = GetWorld();
-		if (World != NULL)
+		if (World != nullptr)
 		{
 			FRotator SpawnRotation = FP_MuzzleLocation->GetComponentRotation();
 
@@ -68,18 +68,18 @@ void AGun::OnFire()
 	}
 
 	// try and play the sound if specified
-	if (FireSound != NULL)
+	if (FireSound != nullptr)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
 	}
 
 	// try and play a firing animation if specified
-	if (FireAnimation != NULL)
+	if (FireAnimationFP!=nullptr && AnimInstanceFP != nullptr)
 	{
-		// Get the animation object for the arms mesh
-		if (AnimInstance != NULL)
-		{
-			AnimInstance->Montage_Play(FireAnimation, 1.f);
-		}
+		AnimInstanceFP->Montage_Play(FireAnimationFP, 1.f);
+	}
+	if (FireAnimationTP != nullptr && AnimInstanceTP != nullptr)
+	{
+		AnimInstanceTP->Montage_Play(FireAnimationTP, 1.f);
 	}
 }

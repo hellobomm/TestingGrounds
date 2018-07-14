@@ -17,49 +17,36 @@ ATile::ATile()
 void ATile::BeginPlay()
 {
 	Super::BeginPlay();
-	CastSphere(GetActorLocation(), 300);
-	CastSphere(GetActorLocation() + FVector(0,0,1000), 300);
+	CanSpawnAtLocation(GetActorLocation(), 300);
+	CanSpawnAtLocation(GetActorLocation() + FVector(0,0,1000), 300);
 }
 
 // Called every frame
 void ATile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	
-
 }
 
-void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int32 MinSpawn, int32 MaxSpawn)
+void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int32 MinSpawn=1, int32 MaxSpawn=1, float Radius=500)
 {	
-	FVector Min(0, -2000, 0);
-	FVector Max{4000,2000,0 };
-	FBox Bounds(Min, Max);
-
 	int32 NumberToSpawn = FMath::RandRange(MinSpawn, MaxSpawn);
-
 	for (int32 i = 0; i < NumberToSpawn; i++)
 	{ 
-		FRotator SpawnRotation = FRotator(0.0f, FMath::RandRange(0.0f, 360.0f),0.0f);
-		FVector SpawnPoint = FMath::RandPointInBox(Bounds);
-
-		//TODO Check with CastSphere if location is free
-		//CastSphere(Spawned->GetActorLocation(), 300);
-
-		AActor* Spawned = GetWorld()->SpawnActor<AActor>(ToSpawn);
-		Spawned->SetActorRelativeLocation(SpawnPoint);
-		Spawned->SetActorRelativeRotation(SpawnRotation);
-		Spawned->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+		FVector SpawnPoint;
+		if (FindEmptyLocation(Radius, SpawnPoint))
+		{
+			PlaceActor(ToSpawn, SpawnPoint);
+		}
 	}
-	
 }
 
-bool ATile::CastSphere(FVector Location, float Radius)
+bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
 {
 	FHitResult HitResult;
+	FVector GlobalLocation = ActorToWorld().TransformPosition(Location);
 	bool HasHit = GetWorld()->SweepSingleByChannel(	HitResult,
-													Location,
-													Location,
+													GlobalLocation,
+													GlobalLocation,
 													FQuat::Identity,
 													ECollisionChannel::ECC_GameTraceChannel2,
 													FCollisionShape::MakeSphere(Radius)
@@ -67,7 +54,7 @@ bool ATile::CastSphere(FVector Location, float Radius)
 	//ui!!! Lecture 311  
 	FColor ResultColor = HasHit ? FColor::Red : FColor::Green;
 	DrawDebugCapsule(	GetWorld(),
-						Location,
+						GlobalLocation,
 						0,
 						Radius,
 						FQuat::Identity,
@@ -76,6 +63,31 @@ bool ATile::CastSphere(FVector Location, float Radius)
 						100
 					);
 
-	return HasHit;
+	return !HasHit;
 }
 
+bool ATile::FindEmptyLocation(float Radius, FVector& SpawnPoint)
+{
+	FVector Min(0, -2000, 0);
+	FVector Max{4000,2000,0 };
+	FBox Bounds(Min, Max);
+	
+	//Check with CastSphere if location is free
+	const int32 MAX_ATTEMPTS = 100;
+	for (int32 i = 0; i < MAX_ATTEMPTS; i++)
+	{
+		SpawnPoint = FMath::RandPointInBox(Bounds);
+		if (CanSpawnAtLocation(SpawnPoint, 300)) return true;
+	}
+	//nothing found...
+	return false;
+}
+
+void ATile::PlaceActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint)
+{
+	AActor* Spawned = GetWorld()->SpawnActor<AActor>(ToSpawn);
+	Spawned->SetActorRelativeLocation(SpawnPoint);
+	FRotator SpawnRotation = FRotator(0.0f, FMath::RandRange(0.0f, 360.0f), 0.0f);
+	Spawned->SetActorRelativeRotation(SpawnRotation);
+	Spawned->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+}

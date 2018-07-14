@@ -39,9 +39,13 @@ void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int32 MinSpawn, int32 MaxSp
 	int32 NumberToSpawn = FMath::RandRange(MinSpawn, MaxSpawn);
 
 	for (int32 i = 0; i < NumberToSpawn; i++)
-	{
+	{ 
 		FRotator SpawnRotation = FRotator(0.0f, FMath::RandRange(0.0f, 360.0f),0.0f);
 		FVector SpawnPoint = FMath::RandPointInBox(Bounds);
+
+		//TODO Check with CastSphere if location is free
+		//CastSphere(Spawned->GetActorLocation(), 300);
+
 		AActor* Spawned = GetWorld()->SpawnActor<AActor>(ToSpawn);
 		Spawned->SetActorRelativeLocation(SpawnPoint);
 		Spawned->SetActorRelativeRotation(SpawnRotation);
@@ -57,21 +61,20 @@ bool ATile::CastSphere(FVector Location, float Radius)
 													Location,
 													Location,
 													FQuat::Identity,
-													ECollisionChannel::ECC_Camera,
+													ECollisionChannel::ECC_GameTraceChannel2,
 													FCollisionShape::MakeSphere(Radius)
 												);
 	//ui!!! Lecture 311  
-	FColor RenameColor = HasHit ? FColor::Red : FColor::Green;
-
-	DrawDebugSphere(GetWorld(),
-					Location,
-					Radius,
-					32,
-					RenameColor,
-					true,
-					100
-	);
-
+	FColor ResultColor = HasHit ? FColor::Red : FColor::Green;
+	DrawDebugCapsule(	GetWorld(),
+						Location,
+						0,
+						Radius,
+						FQuat::Identity,
+						ResultColor,
+						true,
+						100
+					);
 
 	return HasHit;
 }

@@ -30,6 +30,8 @@ void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int32 MinSpawn, int32 MaxSp
 {	
 	int32 NumberToSpawn = FMath::RandRange(MinSpawn, MaxSpawn);
 
+	
+
 	////cast the obejct to spawn into an AActor to get the Method   GetComponents
 	//AActor* ObjectToPlace = Cast<AActor>(ToSpawn);
 	//TArray<UStaticMeshComponent*> Components;

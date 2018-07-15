@@ -22,28 +22,6 @@ void UGrassComponent::BeginPlay()
 	CreateInstances();
 
 	// ...
-
-
-	////look for UHierarchicalInstancedStaticMeshComponent in the components
-	//TArray<UActorComponent*> HIMCs;
-	//HIMCs = GetComponentsByClass(UHierarchicalInstancedStaticMeshComponent::StaticClass());
-
-	//for (int32 i = 0; i<HIMCs.Num(); i++)
-	//{
-	//	UHierarchicalInstancedStaticMeshComponent* TempHIMC = Cast<UHierarchicalInstancedStaticMeshComponent>(HIMCs[i]);
-
-	//	for (int32 j = 0; j < int32 MaxNumberOfInstances; j++)
-	//	{
-	//		FVector Min(0, -2000, 0);
-	//		FVector Max{ 4000,2000,0 };
-	//		FBox Area(Min, Max);
-
-	//		FTransform InstanceTransform;
-	//		InstanceTransform.SetLocation(FMath::RandPointInBox(Area));
-	//		InstanceTransform.SetRotation(FQuat(GetActorUpVector(), FMath::RandRange(-180.0f, 180.0f)));
-	//		TempHIMC->AddInstance(InstanceTransform);
-	//	}
-	//}
 	
 }
 

@@ -6,20 +6,18 @@
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 
 
+
 // Sets default values
 ATile::ATile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
 void ATile::BeginPlay()
 {
 	Super::BeginPlay();
-	CanSpawnAtLocation(GetActorLocation(), 300);
-	CanSpawnAtLocation(GetActorLocation() + FVector(0,0,1000), 300);
 }
 
 // Called every frame
@@ -32,22 +30,22 @@ void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int32 MinSpawn, int32 MaxSp
 {	
 	int32 NumberToSpawn = FMath::RandRange(MinSpawn, MaxSpawn);
 
-	//cast the obejct to spawn into an AActor to get the Method   GetComponents
-	AActor* ObjectToPlace = Cast<AActor>(ToSpawn);
-	TArray<UStaticMeshComponent*> Components;
-	if (!ObjectToPlace) return;
-	ObjectToPlace->GetComponents<UStaticMeshComponent>(Components);
-	
-	Radius = 100;
-	for (int32 i = 0; i < Components.Num(); i++)
-	{	
-		FVector MinBound;
-		FVector MaxBound;
-		Components[i]->GetLocalBounds(MinBound, MaxBound);
-	
-		if (MinBound.Size() > Radius)Radius = MinBound.Size();
-		if (MaxBound.Size() > Radius)Radius = MaxBound.Size();
-	}
+	////cast the obejct to spawn into an AActor to get the Method   GetComponents
+	//AActor* ObjectToPlace = Cast<AActor>(ToSpawn);
+	//TArray<UStaticMeshComponent*> Components;
+	//if (!ObjectToPlace) return;
+	//ObjectToPlace->GetComponents<UStaticMeshComponent>(Components);
+	//
+	//Radius = 100;
+	//for (int32 i = 0; i < Components.Num(); i++)
+	//{	
+	//	FVector MinBound;
+	//	FVector MaxBound;
+	//	Components[i]->GetLocalBounds(MinBound, MaxBound);
+	//
+	//	if (MinBound.Size() > Radius)Radius = MinBound.Size();
+	//	if (MaxBound.Size() > Radius)Radius = MaxBound.Size();
+	//}
 	
 
 	for (int32 i = 0; i < NumberToSpawn; i++)

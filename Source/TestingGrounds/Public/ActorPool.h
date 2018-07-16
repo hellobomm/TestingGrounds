@@ -1,0 +1,23 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Components/ActorComponent.h"
+#include "ActorPool.generated.h"
+
+
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class TESTINGGROUNDS_API UActorPool : public UActorComponent
+{
+	GENERATED_BODY()
+
+public:	
+	// Sets default values for this component's properties
+	UActorPool();
+
+	AActor* CheckOut(); //give actor to the tile which at the end of its lifetime has to return
+	void Return(AActor* ActorToReturn); //return the actor to the pool
+	void Add(AActor* ActorToAdd);
+
+};

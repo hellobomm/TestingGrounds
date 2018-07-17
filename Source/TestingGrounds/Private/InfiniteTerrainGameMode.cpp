@@ -22,7 +22,7 @@ void AInfiniteTerrainGameMode::PopulateBoundsVolumePool()
 	{
 		AddToPool(*NavMeshBoundsVolumeIterator); //the content is of course the pointer to a NavMeshBoundsVolume
 		ANavMeshBoundsVolume* FoundNavMeshBoundsVolume = *NavMeshBoundsVolumeIterator;
-		UE_LOG(LogTemp,Warning,TEXT("Found FoundNavMeshBoundsVolume: %s"), *FoundNavMeshBoundsVolume->GetName())
+		//UE_LOG(LogTemp,Warning,TEXT("Found FoundNavMeshBoundsVolume: %s"), *FoundNavMeshBoundsVolume->GetName())
 		++NavMeshBoundsVolumeIterator;  //otherwise it won't compile
 	}
 }

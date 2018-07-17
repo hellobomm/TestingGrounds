@@ -2,8 +2,16 @@
 
 #include "InfiniteTerrainGameMode.h"
 #include "AI/Navigation/NavMeshBoundsVolume.h"
+#include "ActorPool.h"
 #include "EngineUtils.h"
 
+
+
+
+AInfiniteTerrainGameMode::AInfiniteTerrainGameMode()
+{
+	NavMeshBoundsVolumePool = CreateDefaultSubobject<UActorPool>(FName("ActorPool"));
+}
 
 
 void AInfiniteTerrainGameMode::PopulateBoundsVolumePool()

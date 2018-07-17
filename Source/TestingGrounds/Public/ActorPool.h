@@ -20,4 +20,8 @@ public:
 	void Return(AActor* ActorToReturn); //return the actor to the pool
 	void Add(AActor* ActorToAdd);
 
+private:
+	
+
+
 };

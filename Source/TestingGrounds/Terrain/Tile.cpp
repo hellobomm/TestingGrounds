@@ -26,6 +26,11 @@ void ATile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ATile::SetActorPool(UActorPool * Actor_Pool)
+{
+	ActorPool = Actor_Pool;
+}
+
 void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int32 MinSpawn, int32 MaxSpawn, float Radius, float MinScale, float MaxScale)
 {	
 	int32 NumberToSpawn = FMath::RandRange(MinSpawn, MaxSpawn);

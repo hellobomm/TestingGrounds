@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "TestingGroundsGameMode.h"
+#include "ActorPool.h"
 #include "InfiniteTerrainGameMode.generated.h"
 
 /**
@@ -14,7 +15,6 @@ class TESTINGGROUNDS_API AInfiniteTerrainGameMode : public ATestingGroundsGameMo
 {
 	GENERATED_BODY()
 
-
 public:
 	AInfiniteTerrainGameMode();
 
@@ -23,7 +23,7 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pool") //public to be accessed by the blueprint
-		class UActorPool* NavMeshBoundsVolumePool;
+	class UActorPool* NavMeshBoundsVolumePool;
 
 private:
 	void AddToPool(class ANavMeshBoundsVolume* VolumeToAdd);

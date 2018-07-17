@@ -2,6 +2,7 @@
 
 #include "Tile.h"
 #include "Engine/World.h"
+#include "ActorPool.h"
 #include "Runtime/Engine/Public/DrawDebugHelpers.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 
@@ -29,6 +30,19 @@ void ATile::Tick(float DeltaTime)
 void ATile::SetActorPool(UActorPool * Actor_Pool)
 {
 	ActorPool = Actor_Pool;
+	PositionNavMeshBoundsVolume();
+}
+
+void ATile::PositionNavMeshBoundsVolume()
+{
+	NavMeshBoundsVolume = ActorPool->CheckOut();
+
+	if (NavMeshBoundsVolume==nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Not enough Actors in pool"))
+		return;
+	}
+	NavMeshBoundsVolume->SetActorLocation(GetActorLocation());
 }
 
 void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int32 MinSpawn, int32 MaxSpawn, float Radius, float MinScale, float MaxScale)
@@ -36,7 +50,6 @@ void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int32 MinSpawn, int32 MaxSp
 	int32 NumberToSpawn = FMath::RandRange(MinSpawn, MaxSpawn);
 
 	
-
 	////cast the obejct to spawn into an AActor to get the Method   GetComponents
 	//AActor* ObjectToPlace = Cast<AActor>(ToSpawn);
 	//TArray<UStaticMeshComponent*> Components;
@@ -83,18 +96,18 @@ bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
 	//FColor ResultColor = HasHit ? FColor::Red : FColor::Green;
 	FColor ResultColor = FColor::Blue;
 	
-	if (!HasHit)
-	{
-		DrawDebugCapsule(GetWorld(),
-			GlobalLocation,
-			0,
-			Radius,
-			FQuat::Identity,
-			ResultColor,
-			true,
-			100
-		);
-	}
+	//if (!HasHit)
+	//{
+	//	DrawDebugCapsule(GetWorld(),
+	//		GlobalLocation,
+	//		0,
+	//		Radius,
+	//		FQuat::Identity,
+	//		ResultColor,
+	//		true,
+	//		100
+	//	);
+	//}
 	
 
 	return !HasHit;
@@ -124,4 +137,9 @@ void ATile::PlaceActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint, float Ro
 	Spawned->SetActorRotation(FRotator(0.0f, Rotation, 0.0f));
 	Spawned->SetActorScale3D(FVector(Scale));
 	Spawned->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+}
+
+void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason) 
+{
+	ActorPool->Return(NavMeshBoundsVolume);
 }

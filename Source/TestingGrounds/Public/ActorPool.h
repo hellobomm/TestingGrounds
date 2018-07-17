@@ -16,12 +16,16 @@ public:
 	// Sets default values for this component's properties
 	UActorPool();
 
+	UFUNCTION(BlueprintCallable, Category = "Bounds Pool")
 	AActor* CheckOut(); //give actor to the tile which at the end of its lifetime has to return
+
+	UFUNCTION(BlueprintCallable, Category = "Bounds Pool")
 	void Return(AActor* ActorToReturn); //return the actor to the pool
+	
+	UFUNCTION(BlueprintCallable, Category = "Bounds Pool")
 	void Add(AActor* ActorToAdd);
 
 private:
 	
-
 
 };

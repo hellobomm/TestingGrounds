@@ -3,6 +3,8 @@
 #include "Tile.h"
 #include "Engine/World.h"
 #include "ActorPool.h"
+#include "Engine/World.h"
+#include "AI/Navigation/NavigationSystem.h"
 #include "Runtime/Engine/Public/DrawDebugHelpers.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 
@@ -13,6 +15,8 @@ ATile::ATile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	NavigationBoundsOffset = FVector(2000, 0, 0);
 
 	MinExtent = FVector(0, -2000, 0);
 	MaxExtent = FVector(4000, 2000, 0);
@@ -46,14 +50,17 @@ void ATile::PositionNavMeshBoundsVolume()
 		return;
 	}
 	UE_LOG(LogTemp,Warning, TEXT("new Tile [%s] checked out from the pool: %s"), *GetName(),*NavMeshBoundsVolume->GetName())
-	NavMeshBoundsVolume->SetActorLocation(GetActorLocation());
+	NavMeshBoundsVolume->SetActorLocation(GetActorLocation()+ NavigationBoundsOffset);
+
+	//we now have to rebuild the Volume
+	GetWorld()->GetNavigationSystem()->Build();
 }
 
 void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int32 MinSpawn, int32 MaxSpawn, float Radius, float MinScale, float MaxScale)
 {	
 	int32 NumberToSpawn = FMath::RandRange(MinSpawn, MaxSpawn);
 
-	
+	 
 	////cast the obejct to spawn into an AActor to get the Method   GetComponents
 	//AActor* ObjectToPlace = Cast<AActor>(ToSpawn);
 	//TArray<UStaticMeshComponent*> Components;

@@ -88,7 +88,7 @@ void AFirstPersonCharacter::BeginPlay()
 	
 	if (!GunBlueprint)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("no GunBlueprint found"))
+		UE_LOG(LogTemp, Error, TEXT("no GunBlueprint found"))
 			return;
 	}
 

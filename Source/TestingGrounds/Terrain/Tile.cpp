@@ -49,7 +49,7 @@ void ATile::PositionNavMeshBoundsVolume()
 		UE_LOG(LogTemp, Error, TEXT("new Tile [%s] complains: Not enough Actors in pool!"), *GetName())
 		return;
 	}
-	UE_LOG(LogTemp,Warning, TEXT("new Tile [%s] checked out from the pool: %s"), *GetName(),*NavMeshBoundsVolume->GetName())
+	//UE_LOG(LogTemp,Warning, TEXT("new Tile [%s] checked out from the pool: %s"), *GetName(),*NavMeshBoundsVolume->GetName())
 	NavMeshBoundsVolume->SetActorLocation(GetActorLocation()+ NavigationBoundsOffset);
 
 	//we now have to rebuild the Volume
@@ -164,7 +164,7 @@ bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
 
 void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason) 
 {
-	UE_LOG(LogTemp, Warning, TEXT("Tile [%s] returned to pool: %s"), *GetName(), *NavMeshBoundsVolume->GetName())
+	//UE_LOG(LogTemp, Warning, TEXT("Tile [%s] returned to pool: %s"), *GetName(), *NavMeshBoundsVolume->GetName())
 	ActorPool->Return(NavMeshBoundsVolume);
 }
 

@@ -40,6 +40,16 @@ void ATile::SetActorPool(UActorPool * Actor_Pool)
 	PositionNavMeshBoundsVolume();
 }
 
+void ATile::SetTileIndex(int32 Tileindex) 
+{
+	TileIndex = Tileindex;
+}
+
+int32 ATile::GetTileIndex()
+{
+	return TileIndex;
+}
+
 void ATile::PositionNavMeshBoundsVolume()
 {
 	NavMeshBoundsVolume = ActorPool->CheckOut();
@@ -100,14 +110,11 @@ void ATile::PlaceActor(TSubclassOf<AActor> ToSpawn, FSpawnPosition SpawnPosition
 
 void ATile::PlaceActor(TSubclassOf<APawn> ToSpawn, FSpawnPosition SpawnPosition)
 {
-	APawn* Spawned = GetWorld()->SpawnActor<APawn>(ToSpawn);
+	FRotator Rotation = FRotator(0.0f, SpawnPosition.Rotation, 0.0f);
+	APawn* Spawned = GetWorld()->SpawnActor<APawn>(ToSpawn, SpawnPosition.Location, Rotation);
 	if (Spawned)
 	{
-		Spawned->SetActorRelativeLocation(SpawnPosition.Location);
-		Spawned->SetActorRotation(FRotator(0.0f, SpawnPosition.Rotation, 0.0f));
-		Spawned->SetActorScale3D(FVector(SpawnPosition.Scale));
 		Spawned->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
-
 		Spawned->SpawnDefaultController();
 		Spawned->Tags.Add(FName("Enemy"));
 	}
@@ -165,8 +172,13 @@ bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
 void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason) 
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Tile [%s] returned to pool: %s"), *GetName(), *NavMeshBoundsVolume->GetName())
-	ActorPool->Return(NavMeshBoundsVolume);
+	if (ActorPool != nullptr && NavMeshBoundsVolume != nullptr)
+	{
+		ActorPool->Return(NavMeshBoundsVolume);
+	}
 }
+	
+	
 
 
 

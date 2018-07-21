@@ -51,10 +51,18 @@ public:
 		void SetActorPool(UActorPool* Actor_Pool);
 
 	UFUNCTION(BlueprintCallable, Category = "SetUp")
+		void SetTileIndex(int32 Tileindex);
+
+	UFUNCTION(BlueprintCallable, Category = "SetUp")
+		int32 GetTileIndex();
+
+	UFUNCTION(BlueprintCallable, Category = "SetUp")
 		void PlaceActors(TSubclassOf<AActor> ToSpawn, int32 MinSpawn = 1, int32 MaxSpawn = 1, float Radius = 500, float MinScale = 1, float MaxScale = 1);
 
 	UFUNCTION(BlueprintCallable, Category = "SetUp")
 		void PlaceAIPawns(TSubclassOf<APawn> ToSpawn, int32 MinSpawn=1, int32 MaxSpawn=1, float Radius=500);
+
+
 
 private:
 	UActorPool* ActorPool;
@@ -69,6 +77,9 @@ private:
 	void PlaceActor(TSubclassOf<APawn> ToSpawn, const FSpawnPosition SpawnPosition);
 
 	void PositionNavMeshBoundsVolume();
+
+	int32 TileIndex=0;
+	
 };
 
 
